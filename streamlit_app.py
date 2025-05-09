@@ -1,23 +1,28 @@
 import streamlit as st
 import openai
 
-# OpenAI API key
-openai.api_key = "JOUW_API_KEY_HIER"  # Vul hier je eigen API Key in
+# Zet hier je API key
+client = openai.OpenAI(api_key=st.secrets["openai_api_key"])
 
-st.title("Viral Video Generator")
+st.title("Virale Video Generator")
+st.write("Plak hier je YouTube link en ik genereer virale hashtags en tekst voor je!")
 
-youtube_link = st.text_input("Plak hier je YouTube link:")
+# Inputveld voor YouTube link
+video_link = st.text_input("Plak je video link hier:")
 
-if st.button("Genereer viral clip!"):
-    if youtube_link:
-        with st.spinner("AI is bezig..."):
-            prompt = f"Genereer een virale tekst en hashtags voor deze YouTube video: {youtube_link}"
-            response = openai.ChatCompletion.create(
+if st.button("Genereer"):
+    if video_link:
+        with st.spinner("AI is aan het denken..."):
+            # Prompt voor AI
+            prompt = f"Genereer een virale tekst en hashtags voor deze video link: {video_link}"
+            
+            response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": prompt}]
             )
-            result = response['choices'][0]['message']['content']
-            st.success("Klaar!")
+            
+            result = response.choices[0].message.content
+            st.success("Gegenereerd!")
             st.write(result)
     else:
-        st.error("Voer eerst een YouTube link in!")
+        st.error("Plak eerst een video link!")
