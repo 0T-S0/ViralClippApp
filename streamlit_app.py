@@ -1,8 +1,8 @@
 import streamlit as st
-import openai
+from openai import OpenAI
 
-# Zet hier je API key
-client = openai.OpenAI(api_key=st.secrets["openai_api_key"])
+# Zet hier je API key via secrets
+client = OpenAI(api_key=st.secrets["openai_api_key"])
 
 st.title("Virale Video Generator")
 st.write("Plak hier je YouTube link en ik genereer virale hashtags en tekst voor je!")
